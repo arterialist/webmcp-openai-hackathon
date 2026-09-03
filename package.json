@@ -1,7 +1,26 @@
 {
   "name": "commonplace-webmcp",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Personal reading desk and publishing space controlled by people and browser agents through WebMCP.",
+  "homepage": "https://commonplace-webmcp.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arterialist/webmcp-openai-hackathon.git"
+  },
+  "keywords": [
+    "webmcp",
+    "openai",
+    "chatgpt",
+    "browser-agents",
+    "model-context-protocol",
+    "local-first",
+    "hackathon",
+    "react",
+    "typescript"
+  ],
+  "author": "arterialist",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "concurrently -k -n API,WEB \"bun run dev:server\" \"bun run dev:client\"",
