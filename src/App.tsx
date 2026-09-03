@@ -486,18 +486,14 @@ function App() {
 
   useEffect(() => {
     let mounted = true
-    let dispose: () => void = () => undefined
-    void registerCommonplaceTools(() => actionsRef.current as AppActions).then(async (result) => {
-      if (!mounted) {
-        result.cleanup()
-        return
-      }
-      dispose = result.cleanup
+    void registerCommonplaceTools(() => actionsRef.current as AppActions).then((result) => {
+      if (!mounted) return
       setRegisteredCount(result.count)
       setRegisteredNames(result.names)
     })
-    return () => { mounted = false; dispose() }
+    return () => { mounted = false }
   }, [])
+
 
   useEffect(() => {
     setToolExecutionListener((name, input) => {

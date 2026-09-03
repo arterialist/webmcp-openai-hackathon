@@ -585,9 +585,23 @@ export async function registerCommonplaceTools(getActions: () => AppActions) {
   const context = document.modelContext ?? existingContext
   if (!context) return { registered: false, count: 0, names: [], cleanup: () => undefined }
 
-  document.modelContext = context
-  if (win && !win.modelContext) win.modelContext = context
-  if (nav && !nav.modelContext) nav.modelContext = context
+  try {
+    if (!document.modelContext) {
+      Object.defineProperty(document, 'modelContext', { value: context, configurable: true, writable: true })
+    }
+  } catch {}
+
+  try {
+    if (win && !win.modelContext) {
+      Object.defineProperty(win, 'modelContext', { value: context, configurable: true, writable: true })
+    }
+  } catch {}
+
+  try {
+    if (nav && !nav.modelContext) {
+      Object.defineProperty(nav, 'modelContext', { value: context, configurable: true, writable: true })
+    }
+  } catch {}
 
   if (typeof window !== 'undefined') {
     ;(window as unknown as { __commonplace?: unknown }).__commonplace = {
@@ -601,6 +615,7 @@ export async function registerCommonplaceTools(getActions: () => AppActions) {
   const controller = new AbortController()
   let count = 0
   const names: string[] = []
+
 
   const targetContexts = new Set<ModelContextLike>()
   if (document.modelContext) targetContexts.add(document.modelContext)
