@@ -8,6 +8,29 @@ Commonplace is a local-first reading desk and publishing space where every prima
 
 ---
 
+## Table of contents
+
+- [Hackathon submission overview](#hackathon-submission-overview)
+  - [1. Why this use case is a strong fit for WebMCP](#1-why-this-use-case-is-a-strong-fit-for-webmcp)
+  - [2. How it creates a better experience](#2-how-it-creates-a-better-experience)
+  - [3. What people and agents can now do together](#3-what-people-and-agents-can-now-do-together)
+  - [4. How WebMCP was implemented](#4-how-webmcp-was-implemented)
+- [WebMCP tool registry (44 tools)](#webmcp-tool-registry-44-tools)
+  - [Reading and feed discovery](#reading-and-feed-discovery-10-tools)
+  - [Authoring and publishing](#authoring-and-publishing-12-tools)
+  - [Personalization and tokens](#personalization-and-tokens-15-tools)
+  - [Navigation and overlays](#navigation-and-overlays-7-tools)
+- [Testing instructions for judges](#testing-instructions-for-judges)
+  - [Option A: Chrome with WebMCP enabled](#option-a-chrome-with-webmcp-enabled)
+  - [Option B: ChatGPT in-app browser](#option-b-chatgpt-in-app-browser)
+  - [Option C: In-page WebMCP tool inspector](#option-c-in-page-webmcp-tool-inspector)
+  - [Option D: Realtime voice agent](#option-d-realtime-voice-agent)
+- [Local development](#local-development)
+  - [Running tests and linting](#running-tests-and-linting)
+- [Hackathon eligibility notice](#hackathon-eligibility-notice)
+
+---
+
 ## Hackathon submission overview
 
 ### 1. Why this use case is a strong fit for WebMCP
