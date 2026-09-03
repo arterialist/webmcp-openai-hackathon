@@ -164,6 +164,9 @@ You can test Commonplace with any of four methods:
 
 ### Option B: ChatGPT in-app browser
 
+> [!WARNING]
+> `gpt-luna` does not support WebMCP tools in the ChatGPT browser. When testing in ChatGPT, use standard supported models such as GPT-4o with site tools enabled.
+
 1. In ChatGPT, open the site tools browser with: `https://commonplace-webmcp.vercel.app`.
 2. Ask ChatGPT to inspect the page and run actions, such as:
    - "Read my reading list and tell me the saved articles."
