@@ -553,31 +553,43 @@ function clamp(value: number, min: number, max: number) { return Math.min(max, M
 
 let getActiveActions: () => AppActions = () => { throw new Error('Commonplace tools are not ready yet.') }
 
+export type ToolExecutionListener = (name: string, input: Record<string, unknown>, result: unknown) => void
+let activeExecutionListener: ToolExecutionListener | null = null
+
+export function setToolExecutionListener(listener: ToolExecutionListener | null) {
+  activeExecutionListener = listener
+}
+
 export function getRealtimeToolName(webMcpName: string) { return webMcpName.replaceAll('.', '_') }
-export function getWebMcpToolNameFromRealtimeName(realtimeName: string) { return commonplaceToolSpecs.find((tool) => getRealtimeToolName(tool.name) === realtimeName)?.name ?? realtimeName }
+export function getWebMcpToolNameFromRealtimeName(realtimeName: string) { return commonplaceToolSpecs.find((tool) => getRealtimeToolName(tool.name) === realtimeName || tool.name === realtimeName)?.name ?? realtimeName }
 export function getRealtimeToolDefinitions() { return commonplaceToolSpecs.map(({ name, description, inputSchema }) => ({ type: 'function' as const, name: getRealtimeToolName(name), description, parameters: inputSchema })) }
 
 export async function registerCommonplaceTools(getActions: () => AppActions) {
   getActiveActions = getActions
   if (typeof document === 'undefined') return { registered: false, count: 0, names: [], cleanup: () => undefined }
-  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-    if ((navigator as unknown as { modelContext?: ModelContextLike }).modelContext && !document.modelContext) {
-      document.modelContext = (navigator as unknown as { modelContext: ModelContextLike }).modelContext
+
+  const win = typeof window !== 'undefined' ? (window as unknown as { modelContext?: ModelContextLike }) : undefined
+  const nav = typeof navigator !== 'undefined' ? (navigator as unknown as { modelContext?: ModelContextLike }) : undefined
+
+  let existingContext = document.modelContext || win?.modelContext || nav?.modelContext
+
+  if (!existingContext) {
+    try {
+      initializeWebMCPPolyfill({ installTestingShim: true })
+      existingContext = document.modelContext
+    } catch {
+      return { registered: false, count: 0, names: [], cleanup: () => undefined }
     }
   }
-  if (!document.modelContext) {
-    try { initializeWebMCPPolyfill({ installTestingShim: true }) } catch { return { registered: false, count: 0, names: [], cleanup: () => undefined } }
-  }
-  const context = document.modelContext
+
+  const context = document.modelContext ?? existingContext
   if (!context) return { registered: false, count: 0, names: [], cleanup: () => undefined }
 
-  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-    if (!(navigator as unknown as { modelContext?: ModelContextLike }).modelContext) {
-      (navigator as unknown as { modelContext: ModelContextLike }).modelContext = context
-    }
-    if (!(window as unknown as { modelContext?: ModelContextLike }).modelContext) {
-      (window as unknown as { modelContext: ModelContextLike }).modelContext = context
-    }
+  document.modelContext = context
+  if (win && !win.modelContext) win.modelContext = context
+  if (nav && !nav.modelContext) nav.modelContext = context
+
+  if (typeof window !== 'undefined') {
     ;(window as unknown as { __commonplace?: unknown }).__commonplace = {
       getActions,
       getSnapshot: () => getActions().getSnapshot(),
@@ -589,17 +601,70 @@ export async function registerCommonplaceTools(getActions: () => AppActions) {
   const controller = new AbortController()
   let count = 0
   const names: string[] = []
-  for (const tool of commonplaceToolSpecs) {
-    try { await context.registerTool(tool, { signal: controller.signal }); count += 1; names.push(tool.name) } catch (error) { console.warn(`[Commonplace] Could not register ${tool.name}`, error) }
+
+  const targetContexts = new Set<ModelContextLike>()
+  if (document.modelContext) targetContexts.add(document.modelContext)
+  if (win?.modelContext) targetContexts.add(win.modelContext)
+  if (nav?.modelContext) targetContexts.add(nav.modelContext)
+
+  for (const ctx of targetContexts) {
+    for (const tool of commonplaceToolSpecs) {
+      const wrappedTool: ToolDescriptor = {
+        ...tool,
+        execute: async (input: Record<string, unknown>) => {
+          const result = await tool.execute(input)
+          if (activeExecutionListener) {
+            try { activeExecutionListener(tool.name, input, result) } catch {}
+          }
+          return result
+        },
+      }
+
+      try {
+        await ctx.registerTool(wrappedTool, { signal: controller.signal })
+        if (!names.includes(tool.name)) {
+          count += 1
+          names.push(tool.name)
+        }
+      } catch (error) {
+        console.warn(`[Commonplace] Could not register ${tool.name}`, error)
+      }
+
+      // Register underscore alias for ChatGPT / OpenAI function naming requirements (^[a-zA-Z0-9_-]+$)
+      const underscoreName = getRealtimeToolName(tool.name)
+      if (underscoreName !== tool.name) {
+        try {
+          await ctx.registerTool({ ...wrappedTool, name: underscoreName }, { signal: controller.signal })
+        } catch {
+          // Ignore if host already maps or disallows alias
+        }
+      }
+    }
   }
+
   return { registered: count > 0, count, names, cleanup: () => controller.abort() }
 }
 
 interface TestingModelContextLike { executeTool: (name: string, input: string) => Promise<string | null> }
 function parseToolResult(value: unknown) { if (typeof value !== 'string') return value; try { return JSON.parse(value) as unknown } catch { return value } }
 export async function executeRegisteredTool(name: string, input: Record<string, unknown> = {}) {
-  if (typeof navigator !== 'undefined') { const testing = (navigator as Navigator & { modelContextTesting?: TestingModelContextLike }).modelContextTesting; if (testing?.executeTool) return parseToolResult(await testing.executeTool(name, JSON.stringify(input))) }
-  const localTool = commonplaceToolSpecs.find((tool) => tool.name === name)
-  return localTool ? localTool.execute(input) : { ok: false, error: 'Tool not found.' }
+  if (typeof navigator !== 'undefined') {
+    const testing = (navigator as Navigator & { modelContextTesting?: TestingModelContextLike }).modelContextTesting
+    if (testing?.executeTool) {
+      const parsed = parseToolResult(await testing.executeTool(name, JSON.stringify(input)))
+      if (activeExecutionListener) {
+        try { activeExecutionListener(name, input, parsed) } catch {}
+      }
+      return parsed
+    }
+  }
+  const localTool = commonplaceToolSpecs.find((tool) => tool.name === name || getRealtimeToolName(tool.name) === name)
+  if (!localTool) return { ok: false, error: 'Tool not found.' }
+  const result = await localTool.execute(input)
+  if (activeExecutionListener) {
+    try { activeExecutionListener(localTool.name, input, result) } catch {}
+  }
+  return result
 }
+
 

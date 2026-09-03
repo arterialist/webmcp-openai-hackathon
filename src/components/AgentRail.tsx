@@ -3,9 +3,16 @@ import type { ThemeSettings } from '../types'
 import { commonplaceToolSpecs } from '../webmcp'
 import { Button } from '@/components/ui/button'
 
+export interface AgentActionLog {
+  name: string
+  timestamp: string
+  paramsSummary?: string
+}
+
 interface AgentRailProps {
   settings: ThemeSettings
   registeredCount: number
+  lastAction?: AgentActionLog | null
   onOpenTools: (trigger?: HTMLElement) => void
   onOpenStudio: (trigger?: HTMLElement) => void
   onCompose: (trigger?: HTMLElement) => void
@@ -20,7 +27,7 @@ const visibleTools = [
   { label: 'Write an article', icon: 'edit' as const, tone: 'write' },
 ]
 
-export function AgentRail({ settings, registeredCount, onOpenTools, onOpenStudio, onCompose, onOpenVoice, voiceConnected }: AgentRailProps) {
+export function AgentRail({ settings, registeredCount, lastAction, onOpenTools, onOpenStudio, onCompose, onOpenVoice, voiceConnected }: AgentRailProps) {
   const toolTotal = commonplaceToolSpecs.length
 
   return (
@@ -36,7 +43,19 @@ export function AgentRail({ settings, registeredCount, onOpenTools, onOpenStudio
         <p className="rail-trust-note"><Icon name="tool" size={13} /> Local to this tab · reset in studio.</p>
       </div>
 
+      {lastAction && (
+        <div className="rail-live-action" data-customization-block="rail-live-action">
+          <div className="rail-live-action-head">
+            <span className="rail-live-action-badge"><span className="status-dot status-dot-bright status-dot-pulse" /> Agent executed</span>
+            <span className="rail-live-action-time">{lastAction.timestamp}</span>
+          </div>
+          <code className="rail-live-action-name">{lastAction.name}</code>
+          {lastAction.paramsSummary && <p className="rail-live-action-params">{lastAction.paramsSummary}</p>}
+        </div>
+      )}
+
       {settings.showRailStatus && <div className="rail-status" data-customization-block="rail-status">
+
         <div className="rail-status-top"><span className="status-dot status-dot-bright" /> Browser bridge <strong>{registeredCount > 0 ? 'ready' : 'waiting'}</strong></div>
         <div className="rail-status-line"><span style={{ width: `${Math.min(100, (registeredCount / toolTotal) * 100)}%` }} /></div>
         <div className="rail-status-bottom"><span>{registeredCount}/{toolTotal} tools live</span><span>WebMCP · local</span></div>

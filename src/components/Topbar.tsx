@@ -44,11 +44,34 @@ export function Topbar({ activePage, savedCount, query, onQueryChange, onOpenVoi
           <DropdownMenuItem onSelect={(event) => onOpenTools(event.currentTarget as HTMLElement)}><Icon name="tool" size={16} /> WebMCP tools</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <div className="search-box">
+      <form
+        className="search-box"
+        role="search"
+        onSubmit={(event) => {
+          event.preventDefault()
+          const input = event.currentTarget.querySelector<HTMLInputElement>('input[type="search"]')
+          if (input) onQueryChange(input.value)
+        }}
+        {...({
+          toolname: 'commonplace_search_feed',
+          tooldescription: 'Search posts in Commonplace by keywords, topic tags, or author handle',
+          toolautosubmit: '',
+        } as unknown as React.FormHTMLAttributes<HTMLFormElement>)}
+      >
         <Icon className="search-icon" name="search" size={17} />
-        <Input className="search-field" value={query} type="search" onChange={(event) => onQueryChange(event.target.value)} aria-label="Search your feed" aria-keyshortcuts="/" placeholder="Search your corner of the web" />
+        <Input
+          className="search-field"
+          value={query}
+          type="search"
+          onChange={(event) => onQueryChange(event.target.value)}
+          aria-label="Search your feed"
+          aria-keyshortcuts="/"
+          placeholder="Search your corner of the web"
+          name="query"
+          {...({ toolparamdescription: 'Words, author names, or topic tags to search for' } as unknown as React.InputHTMLAttributes<HTMLInputElement>)}
+        />
         <kbd>/</kbd>
-      </div>
+      </form>
       <div className="topbar-actions">
         <Button className={`topbar-tool${voiceConnected ? ' is-live' : ''}`} variant="secondary" size="sm" type="button" onClick={(event) => onOpenVoice(event.currentTarget)}>
           <span className="topbar-tool-icon"><Icon name="mic" size={16} /></span>

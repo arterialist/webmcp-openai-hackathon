@@ -17,7 +17,7 @@ import { Icon } from './icons'
 import { applyThemeStyleToDocument, defaultTheme, getThemeStyle, normalizeThemeSettings, radiusPresets } from './theme'
 import type { AppSnapshot, ArticleDraft, ArticleEditorState, ArticlePatch, FeedFilterId, HomeBlockId, PageId, Post, ThemeSettings, UserProfile } from './types'
 import { useRealtimeAgent } from './useRealtimeAgent'
-import { commonplaceToolSpecs, executeRegisteredTool, registerCommonplaceTools, type AppActions } from './webmcp'
+import { commonplaceToolSpecs, executeRegisteredTool, registerCommonplaceTools, setToolExecutionListener, type AppActions } from './webmcp'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -142,6 +142,7 @@ function App() {
   const [registeredCount, setRegisteredCount] = useState(0)
   const [registeredNames, setRegisteredNames] = useState<string[]>([])
   const [toast, setToast] = useState('')
+  const [lastAgentAction, setLastAgentAction] = useState<{ name: string; timestamp: string; paramsSummary?: string } | null>(null)
   const actionsRef = useRef<AppActions | null>(null)
   const overlayTriggerRef = useRef<HTMLElement | null>(null)
   const overlayTriggerMetaRef = useRef<{ marker?: string; ariaLabel?: string; text?: string; postId?: string } | null>(null)
@@ -499,6 +500,18 @@ function App() {
   }, [])
 
   useEffect(() => {
+    setToolExecutionListener((name, input) => {
+      const time = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }).format(new Date())
+      const keys = Object.keys(input)
+      const paramsSummary = keys.length ? keys.slice(0, 3).map((k) => `${k}: ${JSON.stringify(input[k])}`).join(', ') : undefined
+      setLastAgentAction({ name, timestamp: time, paramsSummary })
+      setToast(`⚡ WebMCP: ${name}`)
+      window.setTimeout(() => setToast((curr) => curr === `⚡ WebMCP: ${name}` ? '' : curr), 2800)
+    })
+    return () => setToolExecutionListener(null)
+  }, [])
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
         event.preventDefault()
@@ -547,7 +560,7 @@ function App() {
   ) : activePage === 'saved' ? (
     <ReadingListPage settings={theme} posts={filteredPosts} onNavigateHome={() => navigate('home')} onOpenPost={openPost} onToggleSave={toggleSavePost} onToggleLike={toggleLikePost} onEditPost={openComposer} onDeletePost={deleteArticleFromUi} />
   ) : (
-    <HomePage settings={theme} profile={profile} posts={filteredPosts} query={query} filter={feedFilter} savedCount={savedCount} registeredCount={registeredCount} voiceConnected={voiceAgent.isConnected} onFilterChange={setFeedFilter} onClearSearch={clearSearch} onOpenVoice={openVoicePanel} onOpenStudio={openStudio} onCompose={(trigger) => openComposer(undefined, trigger)} onOpenPost={openPost} onToggleSave={toggleSavePost} onToggleLike={toggleLikePost} onEditPost={openComposer} onDeletePost={deleteArticleFromUi} />
+    <HomePage settings={theme} profile={profile} posts={filteredPosts} query={query} filter={feedFilter} savedCount={savedCount} registeredCount={registeredCount} voiceConnected={voiceAgent.isConnected} onFilterChange={setFeedFilter} onClearSearch={clearSearch} onOpenVoice={openVoicePanel} onOpenStudio={openStudio} onCompose={(trigger) => openComposer(undefined, trigger)} onOpenPost={openPost} onToggleSave={toggleSavePost} onToggleLike={toggleLikePost} onEditPost={openComposer} onDeletePost={deleteArticleFromUi} onApplyTheme={setTheme} />
   )
 
   return (
@@ -569,7 +582,7 @@ function App() {
         {theme.showTopbar && <Topbar activePage={activePage} savedCount={savedCount} query={query} onQueryChange={setSearchQuery} onOpenVoice={openVoicePanel} onOpenTools={openTools} onOpenStudio={openStudio} onNavigate={navigate} onCompose={(trigger) => openComposer(undefined, trigger)} voiceConnected={voiceAgent.isConnected} registeredCount={registeredCount} brandName={theme.copy.brandName} />}
         <div className={`content-grid${theme.showAgentRail ? '' : ' no-rail'}`}>
           {pageContent}
-          {theme.showAgentRail && <AgentRail settings={theme} registeredCount={registeredCount} onOpenTools={openTools} onOpenStudio={openStudio} onCompose={(trigger) => openComposer(undefined, trigger)} onOpenVoice={openVoicePanel} voiceConnected={voiceAgent.isConnected} />}
+          {theme.showAgentRail && <AgentRail settings={theme} registeredCount={registeredCount} lastAction={lastAgentAction} onOpenTools={openTools} onOpenStudio={openStudio} onCompose={(trigger) => openComposer(undefined, trigger)} onOpenVoice={openVoicePanel} voiceConnected={voiceAgent.isConnected} />}
         </div>
       </div>
       {selectedPost && <PostReader post={selectedPost} settings={theme} onClose={() => { setSelectedPost(null); restoreOverlayTrigger() }} onToggleSave={toggleSavePost} onToggleLike={toggleLikePost} onEdit={openComposer} onDelete={deleteArticleFromUi} />}
@@ -601,17 +614,19 @@ interface HomePageProps {
   onToggleLike: (postId: string) => void
   onEditPost: (postId: string, trigger?: HTMLElement) => void
   onDeletePost: (postId: string) => void
+  onApplyTheme: (patch: Partial<ThemeSettings>) => void
 }
 
-function HomePage({ settings, profile, posts, query, filter, savedCount, registeredCount, voiceConnected, onFilterChange, onClearSearch, onOpenVoice, onOpenStudio, onCompose, onOpenPost, onToggleSave, onToggleLike, onEditPost, onDeletePost }: HomePageProps) {
+function HomePage({ settings, profile, posts, query, filter, savedCount, registeredCount, voiceConnected, onFilterChange, onClearSearch, onOpenVoice, onOpenStudio, onCompose, onOpenPost, onToggleSave, onToggleLike, onEditPost, onDeletePost, onApplyTheme }: HomePageProps) {
   return (
     <main className="page-content page-home">
       {settings.showHomeTopline && <div className="home-topline" data-customization-block="home-topline"><span>{formatToplineDate()}</span><span className="personalization-live"><span className="status-dot status-dot-bright" /> personalization is local</span></div>}
       <div className="home-block-stack">
         {settings.homeOrder.map((block) => {
           if (block === 'hero' && settings.showHomeHero) {
-            return <section className={`home-intro home-hero${settings.showHeroSurface ? '' : ' home-hero-flat'}`} data-customization-block="home-hero" key={block}><div className="home-intro-copy"><p className="home-kicker">{settings.copy.heroKicker.replace('{name}', profile.name.split(' ')[0])}</p><h1>{settings.copy.heroTitle} <em>{settings.copy.heroEmphasis}</em></h1><p className="home-lede">{settings.copy.heroLede}</p><div className="home-actions"><Button className="primary-button" variant="default" size="lg" type="button" onClick={(event) => onOpenVoice(event.currentTarget)}><Icon name="mic" size={16} /> Ask your space</Button><Button className="secondary-button" variant="outline" size="lg" type="button" onClick={(event) => onOpenStudio(event.currentTarget)}><Icon name="spark" size={16} /> Tune the page</Button></div></div><div className="home-intro-side" aria-label="Personal surface status"><div className="home-signal-card"><div className="home-signal-label"><span className="status-dot status-dot-bright" /> Your surface</div><div className="home-signal-mark" aria-hidden="true"><span /><span /><span /><span /></div><strong>{settings.palette} / {settings.density}</strong><p>{registeredCount || commonplaceToolSpecs.length} page tools are available in this tab.</p><div className="home-signal-meta"><span>{voiceConnected ? 'voice live' : 'voice ready'}</span><span>{settings.contentWidth}ch measure</span></div></div></div></section>
+            return <section className={`home-intro home-hero${settings.showHeroSurface ? '' : ' home-hero-flat'}`} data-customization-block="home-hero" key={block}><div className="home-intro-copy"><p className="home-kicker">{settings.copy.heroKicker.replace('{name}', profile.name.split(' ')[0])}</p><h1>{settings.copy.heroTitle} <em>{settings.copy.heroEmphasis}</em></h1><p className="home-lede">{settings.copy.heroLede}</p><div className="home-actions"><Button className="primary-button" variant="default" size="lg" type="button" onClick={(event) => onOpenVoice(event.currentTarget)}><Icon name="mic" size={16} /> Ask your space</Button><Button className="secondary-button" variant="outline" size="lg" type="button" onClick={(event) => onOpenStudio(event.currentTarget)}><Icon name="spark" size={16} /> Tune the page</Button></div></div><div className="home-intro-side" aria-label="Personal surface status"><div className="home-signal-card"><div className="home-signal-label"><span className="status-dot status-dot-bright" /> Your surface</div><div className="home-signal-mark" aria-hidden="true"><span /><span /><span /><span /></div><strong>{settings.palette} / {settings.density}</strong><div className="home-signal-palettes" role="group" aria-label="Quick palette switch">{((['paper', 'lichen', 'night'] as const)).map((p) => (<button key={p} type="button" className={`palette-chip palette-chip-${p}${settings.palette === p ? ' is-active' : ''}`} onClick={() => onApplyTheme({ palette: p })} title={`Switch to ${p} palette`}><span className="palette-chip-dot" />{p}</button>))}</div><p>{registeredCount || commonplaceToolSpecs.length} page tools are available in this tab.</p><div className="home-signal-meta"><span>{voiceConnected ? 'voice live' : 'voice ready'}</span><span>{settings.contentWidth}ch measure</span></div></div></div></section>
           }
+
           if (block === 'quote' && settings.showQuote) {
             return <aside className="quote-note home-quote" data-customization-block="home-quote" key={block}><span className="quote-mark">“</span><p>{settings.copy.quoteText}</p><div className="quote-note-footer"><span>{settings.copy.quoteSource}</span><span className="quote-rule" /></div></aside>
           }

@@ -1307,6 +1307,92 @@ kbd { min-width: 20px; padding: 2px 5px; color: var(--color-muted); border: 1px 
   .ui-modern .topbar-actions .compose-button { width: 36px; padding: 0; }
 }
 
+.rail-live-action {
+  padding: 10px 12px;
+  border: 1px solid color-mix(in oklch, var(--color-brand) 40%, var(--color-border));
+  border-radius: var(--radius-control);
+  background: color-mix(in oklch, var(--color-brand-soft) 25%, var(--color-surface));
+  display: grid;
+  gap: 5px;
+}
+.rail-live-action-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.rail-live-action-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-brand);
+  font-weight: 600;
+}
+.rail-live-action-time {
+  color: var(--color-muted);
+}
+.rail-live-action-name {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  word-break: break-all;
+}
+.rail-live-action-params {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 44px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.home-signal-palettes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.palette-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  text-transform: capitalize;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.palette-chip:hover {
+  color: var(--color-ink);
+  border-color: var(--color-brand);
+}
+.palette-chip.is-active {
+  color: var(--color-ink);
+  border-color: var(--color-brand);
+  background: var(--color-brand-soft);
+  font-weight: 600;
+}
+.palette-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.palette-chip-paper .palette-chip-dot { background: #176c5b; }
+.palette-chip-lichen .palette-chip-dot { background: #427c3a; }
+.palette-chip-night .palette-chip-dot { background: #d56535; }
+
 /* The surface is intentionally immediate: state changes should be legible
  * without easing, delayed movement, or decorative AI motion. */
 .ui-modern *,
