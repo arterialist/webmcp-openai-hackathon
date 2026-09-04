@@ -636,7 +636,12 @@ export async function registerCommonplaceTools(getActions: () => AppActions) {
       }
 
       try {
-        await ctx.registerTool(wrappedTool, { signal: controller.signal })
+        // Register on document.modelContext directly per the WebMCP specification
+        if (ctx === document.modelContext) {
+          await document.modelContext.registerTool(wrappedTool, { signal: controller.signal })
+        } else {
+          await ctx.registerTool(wrappedTool, { signal: controller.signal })
+        }
         if (!names.includes(tool.name)) {
           count += 1
           names.push(tool.name)
@@ -649,7 +654,11 @@ export async function registerCommonplaceTools(getActions: () => AppActions) {
       const underscoreName = getRealtimeToolName(tool.name)
       if (underscoreName !== tool.name) {
         try {
-          await ctx.registerTool({ ...wrappedTool, name: underscoreName }, { signal: controller.signal })
+          if (ctx === document.modelContext) {
+            await document.modelContext.registerTool({ ...wrappedTool, name: underscoreName }, { signal: controller.signal })
+          } else {
+            await ctx.registerTool({ ...wrappedTool, name: underscoreName }, { signal: controller.signal })
+          }
         } catch {
           // Ignore if host already maps or disallows alias
         }
