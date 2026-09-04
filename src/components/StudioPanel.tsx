@@ -89,7 +89,7 @@ export function StudioPanel({ settings, onChange, onMoveHomeBlock, onMoveNavItem
           <div>
             <div className="eyebrow"><Icon name="spark" size={14} /> Live controls</div>
             <SheetTitle>Make this corner yours.</SheetTitle>
-            <SheetDescription>Every visible layer is editable here—and callable through the page tools.</SheetDescription>
+            <SheetDescription>Every visible layer is editable here, and callable through the page tools.</SheetDescription>
           </div>
           <SheetClose asChild>
             <Button className="icon-button" size="icon-sm" variant="ghost" type="button" aria-label="Close personalization studio"><Icon name="close" size={18} /></Button>

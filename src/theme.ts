@@ -150,15 +150,15 @@ export const defaultTheme: ThemeSettings = {
   customColors: {},
   copy: {
     brandName: 'commonplace',
-    brandKicker: 'a reading desk you can change',
+    brandKicker: 'a reading and publishing desk that adapts to you',
     heroKicker: 'Good to see you, {name}.',
     heroTitle: 'Keep the good',
     heroEmphasis: 'stuff close.',
-    heroLede: 'Read what you saved, change the page when it gets in the way, and ask the agent to handle the clicks.',
-    quoteText: 'A useful interface remembers the small choices you made yesterday, then gives you a way to change them.',
+    heroLede: 'Read what you saved, write new posts, and let your browser agent tune the workspace to how you think.',
+    quoteText: 'Software should adapt to your attention and state of mind, not the other way around.',
     quoteSource: 'a note from your reading list',
-    railTitle: 'Agent controls, in this tab.',
-    railDescription: 'Read the page, search notes, tune the surface, or draft an article. Review each change here.',
+    railTitle: 'Agent controls in this tab',
+    railDescription: 'Read the page, search notes, change the layout, or draft a post. Review each agent action here.',
   },
 }
 

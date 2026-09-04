@@ -88,15 +88,15 @@ function readThemeForDemo() {
     ...stored,
     copy: {
       ...copy,
-      brandKicker: copy.brandKicker === 'a web that knows your hands' ? defaultTheme.copy.brandKicker : copy.brandKicker,
+      brandKicker: ['a web that knows your hands', 'a reading desk you can change'].includes(copy.brandKicker) ? defaultTheme.copy.brandKicker : copy.brandKicker,
       heroKicker: copy.heroKicker === 'A little room for your attention, {name}.' ? defaultTheme.copy.heroKicker : copy.heroKicker,
       heroTitle: copy.heroTitle === 'Make room for' ? defaultTheme.copy.heroTitle : copy.heroTitle,
       heroEmphasis: copy.heroEmphasis === 'what stays.' ? defaultTheme.copy.heroEmphasis : copy.heroEmphasis,
-      heroLede: copy.heroLede === 'Commonplace remembers your pace, keeps the signal close, and lets you change the rules whenever you want.' ? defaultTheme.copy.heroLede : copy.heroLede,
-      quoteText: copy.quoteText === 'Personalization is not a glitter layer. It is the moment a tool stops asking you to repeat what it already knows.' ? defaultTheme.copy.quoteText : copy.quoteText,
+      heroLede: ['Commonplace remembers your pace, keeps the signal close, and lets you change the rules whenever you want.', 'Read what you saved, change the page when it gets in the way, and ask the agent to handle the clicks.'].includes(copy.heroLede) ? defaultTheme.copy.heroLede : copy.heroLede,
+      quoteText: ['Personalization is not a glitter layer. It is the moment a tool stops asking you to repeat what it already knows.', 'A useful interface remembers the small choices you made yesterday, then gives you a way to change them.'].includes(copy.quoteText) ? defaultTheme.copy.quoteText : copy.quoteText,
       quoteSource: copy.quoteSource === 'from your reading list' ? defaultTheme.copy.quoteSource : copy.quoteSource,
-      railTitle: ['Your page has tools.', 'Your page has a toolbox.'].includes(copy.railTitle) ? defaultTheme.copy.railTitle : copy.railTitle,
-      railDescription: ['People and agents can use the same controls. Pick one and watch the page respond.', 'People and agents use the same actions. You can see the seam.'].includes(copy.railDescription) ? defaultTheme.copy.railDescription : copy.railDescription,
+      railTitle: ['Your page has tools.', 'Your page has a toolbox.', 'Agent controls, in this tab.'].includes(copy.railTitle) ? defaultTheme.copy.railTitle : copy.railTitle,
+      railDescription: ['People and agents can use the same controls. Pick one and watch the page respond.', 'People and agents use the same actions. You can see the seam.', 'Read the page, search notes, tune the surface, or draft an article. Review each change here.'].includes(copy.railDescription) ? defaultTheme.copy.railDescription : copy.railDescription,
     },
   })
 }
