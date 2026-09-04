@@ -1,13 +1,13 @@
 import type { Post, UserProfile } from './types'
 
 export const initialProfile: UserProfile = {
-  name: 'Andrew',
-  handle: 'andrew',
-  pronouns: 'he / him',
-  bio: 'I build small tools, write about the web, and take the long way home.',
-  location: 'Kuala Lumpur, MY',
-  website: 'andrew.builds',
-  interests: ['web tools', 'small internet', 'field notes', 'coffee'],
+  name: 'Alex Rivera',
+  handle: 'alex',
+  pronouns: 'they / them',
+  bio: 'Reading, writing, and designing tools for the open web.',
+  location: 'San Francisco, CA',
+  website: 'alexrivera.dev',
+  interests: ['web tools', 'reading lists', 'interface design', 'field notes'],
   following: 184,
   followers: 2470,
   posts: 68,
@@ -16,9 +16,9 @@ export const initialProfile: UserProfile = {
 export const initialPosts: Post[] = [
   {
     id: 'post-1',
-    author: 'Andrew',
-    handle: 'andrew',
-    avatar: 'AN',
+    author: 'Alex Rivera',
+    handle: 'alex',
+    avatar: 'AR',
     published: 'Today, 8:14 AM',
     title: 'What survives a prototype',
     excerpt:
@@ -99,9 +99,9 @@ export const initialPosts: Post[] = [
 export const additionalSamplePosts: Post[] = [
   {
     id: 'post-5',
-    author: 'Andrew',
-    handle: 'andrew',
-    avatar: 'AN',
+    author: 'Alex Rivera',
+    handle: 'alex',
+    avatar: 'AR',
     published: 'Saturday, 10:12 AM',
     title: 'The tab I keep open',
     excerpt: 'I leave one blank tab beside my work. It is where I put the sentence I do not want to lose.',
@@ -135,9 +135,9 @@ export const additionalSamplePosts: Post[] = [
   },
   {
     id: 'post-7',
-    author: 'Andrew',
-    handle: 'andrew',
-    avatar: 'AN',
+    author: 'Alex Rivera',
+    handle: 'alex',
+    avatar: 'AR',
     published: 'Thursday, 8:47 AM',
     title: 'A feed should know when to stop',
     excerpt: 'I do not need another endless list. I need a place that remembers what I meant to come back to.',

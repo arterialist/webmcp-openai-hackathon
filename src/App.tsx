@@ -73,7 +73,7 @@ function readLocal<T>(key: string, fallback: T): T {
 }
 
 function isLegacyDemoProfile(profile: Partial<UserProfile>) {
-  return profile.handle === 'mayachen' || profile.name === 'Maya Chen' || profile.name === 'Maya Visual'
+  return profile.handle === 'mayachen' || profile.name === 'Maya Chen' || profile.name === 'Maya Visual' || profile.handle === 'andrew' || profile.name === 'Andrew'
 }
 
 function readProfileForDemo() {
@@ -109,7 +109,7 @@ function readPostsForDemo() {
     ? stored.map((post) => {
       const seed = seedPosts.get(post.id)
       const migrated = seed ? { ...seed, saved: post.saved, liked: post.liked, likes: post.likes, comments: post.comments } : post
-      return migrated.handle === 'mayachen' || migrated.author === 'Maya Chen' || migrated.author === 'Maya Visual'
+      return migrated.handle === 'mayachen' || migrated.author === 'Maya Chen' || migrated.author === 'Maya Visual' || migrated.handle === 'andrew' || migrated.author === 'Andrew'
         ? { ...migrated, author: initialProfile.name, handle: initialProfile.handle, avatar: getInitials(initialProfile.name) }
         : migrated
     })
