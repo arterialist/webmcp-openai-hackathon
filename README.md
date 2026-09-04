@@ -8,8 +8,24 @@ Commonplace is a local-first reading desk and publishing space where every prima
 
 ---
 
+## Interface gallery
+
+| View | Mode & Typography | Highlight |
+| :--- | :--- | :--- |
+| ![Adaptive Desk Night](gallery/01_adaptive_desk_night.png) | **Adaptive Desk** · Night palette | Quick palette switcher, live WebMCP bridge status, and adaptive feed |
+| ![Article Reader Paper](gallery/02_article_reader_paper.png) | **Reader Mode** · Paper palette | Focused distraction-free reader with generative artwork and local save |
+| ![Tool Inspector Lichen](gallery/03_tool_inspector_lichen.png) | **WebMCP Inspector** · Lichen palette | Slide-out inspector detailing all 44 registered tools with live execution |
+| ![Personalization Studio](gallery/04_personalization_studio.png) | **Personalization Studio** · Paper palette | Granular control of typography, layout spacing, density, and surfaces |
+| ![Article Composer](gallery/05_article_composer.png) | **Article Composer** · Paper palette | Structured publishing dialog callable directly by browser agents |
+| ![Pitch Black Stripped](gallery/06_pitch_black_stripped_down.png) | **Zen Feed** · OLED Pitch Black (`#000000`) | Minimalist reading layout with extraneous UI blocks stripped via settings |
+| ![Voice Agent Dark Emerald](gallery/07_voice_agent_dark_emerald.png) | **Voice Guide** · Dark Emerald (Monospace) | OpenAI Realtime voice assistant drawer connecting speech to WebMCP tools |
+| ![Dark Emerald Serif Profile](gallery/08_dark_emerald_serif_profile.png) | **Public Profile** · Dark Emerald (Editorial Serif) | Public notes desk with author telemetry, custom topics, and serif type |
+
+---
+
 ## Table of contents
 
+- [Interface gallery](#interface-gallery)
 - [Hackathon submission overview](#hackathon-submission-overview)
   - [1. Why this use case is a strong fit for WebMCP](#1-why-this-use-case-is-a-strong-fit-for-webmcp)
   - [2. How it creates a better experience](#2-how-it-creates-a-better-experience)
@@ -184,7 +200,7 @@ You can test Commonplace with any of four methods:
 
 ### Option D: Realtime voice agent
 
-1. Click **Talk to your space** in the top bar or Agent Rail.
+1. Click **Voice guide** in the top bar or Agent Rail.
 2. Allow microphone access when prompted.
 3. Speak a request: *"Switch the theme to night mode and read me what I have saved."*
 4. The voice agent connects over OpenAI Realtime WebRTC and dispatches the exact WebMCP actions live.
