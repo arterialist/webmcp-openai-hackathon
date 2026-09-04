@@ -143,7 +143,7 @@ export function ToolInspector({ registeredNames, onClose, onRestoreFocus, onPrev
           </div>}
         </div>
 
-        <SheetFooter className="sheet-footer tool-sheet-footer"><span className="tool-footnote"><span className="status-dot status-dot-bright" /> {registeredNames.length > 0 ? 'Native or polyfilled browser bridge detected' : 'Browser bridge will appear when supported'}</span><SheetClose asChild><Button className="primary-button" variant="default" size="sm" type="button">Close</Button></SheetClose></SheetFooter>
+        <SheetFooter className="sheet-footer tool-sheet-footer"><span className="tool-footnote">{registeredNames.length > 0 ? 'WebMCP browser bridge active' : 'WebMCP bridge will connect when supported'}</span><SheetClose asChild><Button className="primary-button" variant="default" size="sm" type="button">Close</Button></SheetClose></SheetFooter>
       </SheetContent>
     </Sheet>
   )

@@ -245,7 +245,7 @@ export function StudioPanel({ settings, onChange, onMoveHomeBlock, onMoveNavItem
             </TabsContent>
           </Tabs>
 
-          <div className="studio-footer-note"><span className="status-dot status-dot-bright" /> Changes save to this browser. Agents see the same state.</div>
+          <div className="studio-footer-note">Changes save locally. WebMCP agents observe this state.</div>
         </div>
 
         <SheetFooter className="sheet-footer">

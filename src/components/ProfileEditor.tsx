@@ -27,7 +27,7 @@ export function ProfileEditor({ profile, onSave, onClose }: ProfileEditorProps) 
         <div className="field-label field-label-wide"><Label htmlFor="profile-bio">Bio</Label><Textarea className="text-input" id="profile-bio" rows={3} value={bio} onChange={(event) => setBio(event.target.value)} required /></div>
         <div className="field-label"><Label htmlFor="profile-website">Website</Label><Input className="text-input" id="profile-website" value={website} onChange={(event) => setWebsite(event.target.value)} required /></div>
       </div>
-      <div className="profile-editor-footer"><span className="compose-hint"><span className="status-dot" /> Also available as a WebMCP tool</span><Button className="primary-button" variant="default" size="sm" type="button" onClick={() => { onSave({ name: name.trim() || profile.name, bio: bio.trim() || profile.bio, location: location.trim() || profile.location, website: website.trim() || profile.website }); onClose() }}>Save identity</Button></div>
+      <div className="profile-editor-footer"><span className="compose-hint">Also accessible via WebMCP</span><Button className="primary-button" variant="default" size="sm" type="button" onClick={() => { onSave({ name: name.trim() || profile.name, bio: bio.trim() || profile.bio, location: location.trim() || profile.location, website: website.trim() || profile.website }); onClose() }}>Save identity</Button></div>
     </section>
   )
 }

@@ -61,7 +61,7 @@ export function ComposeDialog({ open, editingPost, draft, onClose, onRestoreFocu
             <Input id="compose-post-tags" className="compose-tags-input" value={draft.tags.join(', ')} onChange={(event) => onDraftChange({ tags: event.target.value.split(',').map((tag) => tag.trim()).filter(Boolean) })} placeholder="malleable software, webmcp, essay" />
           </div>
           <DialogFooter className="compose-footer">
-            <span className="compose-hint"><span className="status-dot" /> {isEditing ? 'Edits stay local to this browser' : 'Article stays local to this browser'}</span>
+            <span className="compose-hint">{isEditing ? 'Saved locally to your browser' : 'Saved locally to your browser'}</span>
             <div className="compose-actions">
               <DialogClose asChild><Button className="text-button" variant="ghost" size="sm" type="button">Cancel</Button></DialogClose>
               <Button className="primary-button" variant="default" size="sm" type="submit" disabled={!canSubmit}>{isEditing ? 'Save article' : 'Publish article'}</Button>

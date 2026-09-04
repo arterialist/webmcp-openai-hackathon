@@ -35,9 +35,8 @@ export function Sidebar({ activePage, profile, savedCount, navOrder, showFooter,
               <div className="brand-kicker">{brandKicker}</div>
             </div>
           </div>
-          <div className="sidebar-section-label">Your corner</div>
         </div>
-        <nav className="primary-nav" aria-label="Your corner">
+        <nav className="primary-nav" aria-label="Navigation">
           {links.map((link) => (
             <Button
               className={`nav-item${activePage === link.page ? ' is-active' : ''}`}
@@ -58,7 +57,6 @@ export function Sidebar({ activePage, profile, savedCount, navOrder, showFooter,
 
       <div className="sidebar-custom">
         <div className="sidebar-rule" />
-        <div className="sidebar-section-label">Make it yours</div>
         <Button className="nav-item nav-item-studio" variant="secondary" size="sm" type="button" onClick={(event) => onOpenStudio(event.currentTarget)}>
           <span className="studio-swatch"><Icon name="spark" size={14} /></span>
           <span>Personalization studio</span>

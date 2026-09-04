@@ -38,7 +38,7 @@ export function Topbar({ activePage, savedCount, query, onQueryChange, onOpenVoi
           <Button className="mobile-menu-button" size="icon" variant="outline" type="button" aria-label="Open navigation"><Icon name="menu" size={18} /></Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mobile-nav-menu" align="start">
-          <DropdownMenuLabel>Your corner</DropdownMenuLabel>
+          <DropdownMenuLabel>Navigation</DropdownMenuLabel>
           {navigation.map((item) => <DropdownMenuItem key={item.page} className={activePage === item.page ? 'is-active' : undefined} onSelect={() => onNavigate(item.page)}><Icon name={item.icon} size={16} /> {item.label}</DropdownMenuItem>)}
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={(event) => onOpenStudio(event.currentTarget as HTMLElement)}><Icon name="spark" size={16} /> Personalization studio</DropdownMenuItem>
@@ -67,7 +67,7 @@ export function Topbar({ activePage, savedCount, query, onQueryChange, onOpenVoi
           onChange={(event) => onQueryChange(event.target.value)}
           aria-label="Search your feed"
           aria-keyshortcuts="/"
-          placeholder="Search your corner of the web"
+          placeholder="Search posts, topics, or authors..."
           name="query"
           {...({ toolparamdescription: 'Words, author names, or topic tags to search for' } as unknown as React.InputHTMLAttributes<HTMLInputElement>)}
         />
@@ -76,7 +76,7 @@ export function Topbar({ activePage, savedCount, query, onQueryChange, onOpenVoi
       <div className="topbar-actions">
         <Button className={`topbar-tool${voiceConnected ? ' is-live' : ''}`} variant="secondary" size="sm" type="button" onClick={(event) => onOpenVoice(event.currentTarget)}>
           <span className="topbar-tool-icon"><Icon name="mic" size={16} /></span>
-          <span className="topbar-tool-text">{voiceConnected ? 'Listening' : 'Talk to your space'}</span>
+          <span className="topbar-tool-text">{voiceConnected ? 'Listening' : 'Voice guide'}</span>
         </Button>
         <Button className="icon-button topbar-inspector" size="icon" variant="outline" type="button" onClick={(event) => onOpenTools(event.currentTarget)} aria-label="Open WebMCP tools">
           <Icon name="tool" size={18} />
