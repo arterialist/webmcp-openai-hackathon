@@ -1,5 +1,6 @@
 import { Icon } from '../icons'
 import type { PageId, UserProfile } from '../types'
+import { BrandLogo } from './BrandLogo'
 import { Button } from '@/components/ui/button'
 import { Avatar } from './Avatar'
 
@@ -28,7 +29,7 @@ export function Sidebar({ activePage, profile, savedCount, navOrder, showFooter,
       <div className="sidebar-navigation">
         <div>
           <div className="brand-lockup">
-            <div className="brand-mark" aria-hidden="true"><span /><span /><span /></div>
+            <BrandLogo size={28} className="brand-logo" />
             <div>
               <div className="brand-name">{brandName}</div>
               <div className="brand-kicker">{brandKicker}</div>

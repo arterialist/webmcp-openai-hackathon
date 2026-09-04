@@ -1,5 +1,6 @@
 import { Icon } from '../icons'
 import type { PageId } from '../types'
+import { BrandLogo } from './BrandLogo'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -29,7 +30,7 @@ export function Topbar({ activePage, savedCount, query, onQueryChange, onOpenVoi
   return (
     <header className="topbar" data-customization-block="topbar">
       <div className="mobile-brand">
-        <div className="brand-mark brand-mark-small" aria-hidden="true"><span /><span /><span /></div>
+        <BrandLogo size={24} className="brand-logo brand-logo-small" />
         <span>{brandName}</span>
       </div>
       <DropdownMenu>

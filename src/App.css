@@ -82,12 +82,8 @@
 }
 
 .brand-lockup { display: flex; gap: 11px; align-items: center; padding: 0 var(--group-gap); }
-.brand-mark { width: 30px; height: 30px; position: relative; flex: 0 0 auto; }
-.brand-mark span { position: absolute; display: block; width: 14px; height: 14px; border: 2px solid var(--color-brand); border-radius: 4px; }
-.brand-mark span:nth-child(1) { top: 0; left: 0; background: var(--color-brand-soft); }
-.brand-mark span:nth-child(2) { right: 0; top: 7px; border-color: var(--color-accent); background: var(--color-accent-soft); }
-.brand-mark span:nth-child(3) { left: 6px; bottom: 0; border-color: var(--color-ink); background: var(--color-surface); }
-.brand-mark-small { transform: scale(0.78); transform-origin: left center; margin-right: -4px; }
+.brand-logo-svg { flex: 0 0 auto; display: block; color: var(--color-ink); filter: drop-shadow(0 2px 8px color-mix(in oklch, var(--color-brand) 30%, transparent)); }
+.brand-logo-small { margin-right: 4px; }
 .brand-name { font-family: var(--font-display); font-size: 1.18rem; line-height: 1; letter-spacing: -0.03em; }
 .brand-kicker { margin-top: 5px; color: var(--color-muted); font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
 .sidebar-section-label { margin: 51px 9px 11px; color: var(--color-muted); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
